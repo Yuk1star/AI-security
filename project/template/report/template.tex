@@ -1,0 +1,487 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% University/School Laboratory Report
+% LaTeX Template
+% Version 4.0 (March 21, 2022)
+%
+% This template originates from:
+% https://www.LaTeXTemplates.com
+%
+% Authors:
+% Vel (vel@latextemplates.com)
+% Linux and Unix Users Group at Virginia Tech Wiki
+%
+% License:
+% CC BY-NC-SA 4.0 (https://creativecommons.org/licenses/by-nc-sa/4.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+\documentclass[
+	letterpaper, % Paper size, specify a4paper (A4) or letterpaper (US letter)
+	10pt, % Default font size, specify 10pt, 11pt or 12pt
+]{CSUniSchoolLabReport}
+
+\addbibresource{sample.bib} % Bibliography file (located in the same folder as the template)
+
+%----------------------------------------------------------------------------------------
+%	REPORT INFORMATION
+%----------------------------------------------------------------------------------------
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+	backgroundcolor=\color{backcolour},   
+	commentstyle=\color{codegreen},
+	keywordstyle=\color{magenta},
+	numberstyle=\tiny\color{codegray},
+	stringstyle=\color{codepurple},
+	basicstyle=\ttfamily\footnotesize,
+	breakatwhitespace=false,         
+	breaklines=true,                 
+	captionpos=b,                    
+	keepspaces=true,                 
+	numbers=left,                    
+	numbersep=5pt,                  
+	showspaces=false,                
+	showstringspaces=false,
+	showtabs=false,                  
+	tabsize=2
+}
+\lstset{style=mystyle}
+\hypersetup{hidelinks, 
+		colorlinks = true,
+		allcolors = black,
+		pdfstartview = Fit,
+		breaklinks = true}
+\title{AI Security Project Report \\ Adversarial Attack based on White-Box \\ And the Defense Mechanisms for the Adversarial setting} % Report title
+
+\author{Huang yucheng Huo yicheng} % Author name(s), add additional authors like: '\& James \textsc{Smith}'
+
+\date{\today} % Date of the report
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle % Insert the title, author and date using the information specified above
+
+\begin{center}
+	\begin{tabular}{l r}
+		Date Performed: & February 13, 2022 \\ % Date the experiment was performed
+		Instructor: & Professor \textsc{Wang zhibo} % Instructor/supervisor
+	\end{tabular}
+\end{center}
+
+% If you need to include an abstract, uncomment the lines below
+%\begin{abstract}
+%	Abstract text
+%\end{abstract}
+
+%----------------------------------------------------------------------------------------
+%	OBJECTIVE
+%----------------------------------------------------------------------------------------
+
+\section{Experiment Objective}
+
+Our group is aiming to reproduce the adversarial attack oriented to Black-Box model and the robust model which is against the attack. Furthermore we are trying to improve both the approach of the way we atttack the model using other loss function and shorten the training time by applying the GPU on the training progess. Last we will test the performance that attack approach show on the robust model we reproduced. 
+
+\section{Experiment Environment}
+Here we list the experiment environment in which we run our experiment.
+\subsection{Dataset}
+1) MNIST data set from tensorflow.example.tutorials.mnist.
+
+2) CIFAR10 data set. (optional)
+\subsection{model}
+Self-build model reproduced from the paper with two Convolutional Neural Network layers and one fully connected layer \href{https://arxiv.org/pdf/1706.06083.pdf}{Towards Deep Learning Models Resistant to Adversarial	Attacks}.
+\subsection{Tools and Program Language}
+\begin{tabular}{l l}
+	Tools & {Anaconda}\\ 
+	Program Language & {Python}\\
+\end{tabular}
+\subsection{Computing Resources}
+\begin{tabular}{l l}
+	CPU & {Intel(R) Core(TM) i7-9750H CPU @ 2.6GHz} \\
+	GPU & {NVIDIA GeForce GTX 1650} \\
+\end{tabular}
+
+\subsection{Software and Libaraies}
+\begin{tabular}{l l}
+	Cuda Version & {V10.0} \\
+	CuDNN & {cudnn-10.1-windows10-x64-v8.0.2.39} \\
+\end{tabular}
+
+
+\section{Scheme Design}
+\subsection{How did the problem raise}
+AI have had a rapid improvement recently, especially in the region of classifying. Meanwhile because a lot of systems with trained neural network aiming to do classfication work are under use, the problem of security is put into the center of attention. Recent work shows that an adversary is often able to manipulate the input so that the model produces an incorrect output.
+\subsection{Guiding Idea of our Project}
+A very small changes to the input image can fool the state-of-art neural networks with high confidence, which gives us an idea about how to ceate adversarial examples. And the impact of network architecture on adversarial robustness is that the capacity plays an important role here. In order to withstand strong adversarial attacks, networks require a larger capacity that for correctly classifying benign examples only.
+
+Building on the above insight, we train networks on MNIST that are robust to a wide range of adversarial attacks. In particual the MNIST network is even robust against white-box attack of an iterative adversary. (But this is not our focus because our testing attack is based on the Black-box)
+\subsection{Main target of our Project}
+\begin{enumerate}
+	\item \textit{Reproduce the previous works}. We reproduec the result from paper \href{https://arxiv.org/pdf/1706.06083.pdf}{Towards Deep Learning Models Resistant to Adversarial	Attacks}. both in attacking approach and the defense approach.  Also we reproduce the model itself 
+	\item \textit{Run it to see the result}. Train the model and use the adversarial examples to attack the model to see their performance.
+	\item \textit{Hardware acceleration}. The origin model training code was running with cpu which is need a huge amount of time. Our group rewrite the code using the GPU and accelerate the training speed for many times.
+\end{enumerate}
+
+\subsection{Design Requirement}
+\begin{enumerate}
+	\item \textit{Combine what we learned from class}. Though it is hard but we manage to put what we have learned into practice with hundreds of codes in Python with tutorial in the repository at \href{https://github.com/MadryLab/mnist_challenge}{minst challenge}
+	\item \textit{Compare the attack result with other adversarial examples}. There is a rank table from the author's repository, we are going to compare our result with them to see if the targeted attack will fetch a better success rate.
+\end{enumerate}
+
+\subsection{Feasibility analysis}
+\begin{enumerate}
+	\item \textit{Hard to reach the level from origin author}. Due to a quite good performance from the robust model the origin author built, it is difficult to get to the same level as they do.
+	\item \textit{Lack of computing resources}. As the model training require a lot of computing resources, it might be a little hard for us to run the whole result we previous set due to we have limited computering resource. Though we will accelerate the process by apply the session on the GPU.
+	\item \textit{Lack of persuasiveness}. We managed to apply our code only to the certain model build by us, so whether it performs well on migration is still in doubt.
+\end{enumerate}
+
+\section{Scheme Innovation}
+\begin{enumerate}
+	\item \textit{What's old renew}. Our group not only reproduce the project about training model and attack approach but also use new code and faster method to upgrade it.
+	\item \textit{What's old brings new}. Our group also apply new attack approach and new way of generate adversarial examples by the method we have learned from the class, which brings us a great challenge.
+\end{enumerate}
+
+\section{Code Analysis I}
+There are four main file in our code, we list the important code block below to illustrate thier function.
+
+1) config.json
+\begin{lstlisting}[language=bash]
+	"model_dir": "models/a_very_robust_model",
+	
+	"random_seed": 4557077,
+	"total_training_steps": 100000,
+	"num_per_output": 100,
+	"num_summary_steps": 100,
+	"num_per_checkpoint": 300,
+	"training_batch_size": 50,
+	
+	"num_eval_examples": 10000,
+	"eval_batch_size": 200,
+	"eval_on_cpu": true,
+	
+	"epsilon": 0.3,
+	"k": 40,
+	"a": 0.01,
+	"random_start": true,
+	"loss_func": "xent",
+	"store_adv_path": "attack.npy"
+\end{lstlisting}
+Here the $random \ seed$ refers the random number generator used to initialize the network weights, $total \ tranining \ steps$  refers that the total training steps, the $num \ per \ output$  refers to how many training step does the output corresponding to, and $num \ per \ checkpoint$ refers to training steps each checkpoint corresponding to. $epsilon$ limit the perturb, and $k, a$ are all parameters of the attack method, here we choose the loss function as the origin author does which is $xent$ -- cross-entropy.
+
+2) model.py
+
+In this file of code we create a robust model used to tolerant the perturbation of the adversarial examples. 
+\begin{lstlisting}[language=Python]
+	@staticmethod
+	def _weight_variable(shape):
+		initial = tf.truncated_normal(shape, stddev=0.1)
+		return tf.Variable(initial)
+	@staticmethod
+	def _bias_variable(shape):
+		initial = tf.constant(0.1, shape = shape)
+		return tf.Variable(initial)
+	@staticmethod
+	def _conv2d(x, W):
+		return tf.nn.conv2d(x, W, strides=[1, 1, 1, 1], padding='SAME')
+	@staticmethod
+	def _max_pool_2x2(x):
+		return tf.nn.max_pool(x, ksize=[1, 2, 2, 1], strides=[1, 2,2,1], padding='SAME')	
+\end{lstlisting}
+Here we use the \emph{staticmethod} to write the funciton we will use in the latter code, where the funciton is basically from the tensorflow.
+\begin{lstlisting}[language=Python]
+# First layer of convolution
+conv1_weight = self._weight_variable([5, 5, 1, 32])
+conv1_bias = self._bias_variable([32])
+conv1_h = tf.nn.relu(self._conv2d(self.x_image, conv1_weight) + conv1_bias)
+pool1_h = self._max_pool_2x2(conv1_h)
+\end{lstlisting}
+From this part we can see how the model build its convolution layer, set the weight by $tf.truncated\_normal$ then set the bias by intervalo of 0.1. Then use the relu to be the activation funciton and use the matrix we get to do two by two pooling. The second convolution layer is as the same so we won't show it here.
+\begin{lstlisting}[language=Python]
+	fully_connected_weight = self._weight_variable([7 * 7 * 64, 1024])
+	fully_connected_bias = self._bias_variable([1024])
+	pool2_h_flat = tf.reshape(pool2_h, [-1, 7*7*64])
+	fully_connected_h = tf.nn.relu(tf.matmul(pool2_h_flat, fully_connected_weight) + fully_connected_bias)
+\end{lstlisting}
+The fully connected layer is to do a matrix multiplication with the weight parameter and the pooling result from the second convolution layer, then use the relu activation function to obtain the result.
+\begin{lstlisting}[language=Python]
+	 y_xent = tf.nn.sparse_softmax_cross_entropy_with_logits(labels = self.y_input, logits=self.pre_softmax)
+	 self.xent = tf.reduce_sum(y_xent)
+\end{lstlisting}
+Last we use the cross entropy to calculate the loss.
+
+3) PGD.py
+
+In this part of code we create the method of create adversarial examples by PGD scheme, here we list the key function of our code.
+\begin{lstlisting}[language=Python]
+def perturb(self, x_nat, y, sess):
+	if self.rand:
+	x = x_nat + np.random.uniform(-self.epsilon, self.epsilon, x_nat.shape)
+	x = np.clip(x, 0, 1)
+	else:
+	x = np.copy(x_nat)
+	for i in range(self.k):
+	grad = sess.run(self.grad, feed_dict={self.model.x_input:x, self.model.y_input:y})
+	x += self.a * np.sign(grad)
+	x = np.clip(x, x_nat - self.epsilon, x_nat + self.epsilon)
+	x = np.clip(x, 0, 1)
+	return x
+\end{lstlisting}
+If the random is true(which is set	Eternal True by the config file), we use random function to create perturbation within the interval of $\pm$ epsilon, use two \emph{clip} function to cut the output to a standard scope.
+
+4) train.py
+
+Finally we introduce the training process, with the file train.py.
+\begin{lstlisting}[language=Python]
+with tf.Session() as sess:
+	sess.run(tf.global_variables_initializer())
+	training_time = 0.0
+	
+	for ii in range(total_training_steps):
+	x_batch, y_batch = mnist.train.next_batch(batch_size)
+	
+	start = timer()
+	x_batch_adv = attack.perturb(x_batch, y_batch, sess)
+	end = timer()
+	training_time += end - start
+	nat_dict = {model.x_input: x_batch, model.y_input: y_batch}
+	adv_dict = {model.x_input: x_batch_adv, model.y_input: y_batch}
+	
+	if ii % num_per_output == 0:
+	nat_acc = sess.run(model.accuracy, feed_dict=nat_dict)
+	adv_acc = sess.run(model.accuracy, feed_dict=adv_dict)
+	print('Step {}:    ({})'.format(ii, datetime.now()))
+	print('    training nat accuracy {:.4}%'.format(nat_acc * 100))
+	print('    training adv accuracy {:.4}%'.format(adv_acc * 100))
+	if ii != 0:
+	print('    {} examples per second'.format(num_per_output * batch_size / training_time))
+	training_time = 0.0
+	
+	if ii % num_per_checkpoint == 0:
+	saver.save(sess,
+	os.path.join(model_dir, 'checkpoint'),
+	global_step=global_step)
+	
+	start = timer()
+	sess.run(train_step, feed_dict=adv_dict)
+	end = timer()
+	training_time += end - start
+\end{lstlisting}
+Use the origin input from MNIST and the pertrubed input from PGD.py, the model create different output and prediction, then output them in the terminal.
+
+\section{Results and Conclusions I}
+\subsection{Results}
+As we first reproduce the origin result and outstream the result to the terminal, it is quite uneasy to list all the message but we manage the gather some of the Log information. 
+
+\begin{lstlisting}[language=bash]
+	Step 27300:    (2022-06-08 11:48:19.264213)
+	training nat accuracy 96.0%
+	training adv accuracy 78.0%
+	36.5704628637909 examples per second
+\end{lstlisting}
+When training for 27300 steps, the accuracy of the natural dataset MNIST is high enough, but the model against the adversarial examples is not good enough for only about 78\%, which isn't robust enough to tolerant the adversarial attack.
+\begin{lstlisting}[language=bash]
+	natural: 96.63%
+	adversarial: 80.40%
+	avg nat loss: 0.1263
+	avg adv loss: 0.5775
+	Waiting for the next checkpoint ...   (2022-06-08 11:44:15.264644)   ........................       
+	Checkpoint models/a_very_robust_model\checkpoint-27300, evaluating ...   (2022-06-08 11:48:25.721207)
+\end{lstlisting}
+From the eval side, we set the total eval examples up to 10000, and from the checkpoint generate by the training process, we can see that even for 27300 steps of training, adversarial accuracy is up to 80\%.
+
+\begin{lstlisting}[language=bash]
+	Step 43500:    (2022-06-08 18:56:40.946555)
+	training nat accuracy 96.0%
+	training adv accuracy 82.0%
+	44.05154817717656 examples per second
+\end{lstlisting}
+After 43500 steps of training, despite the high accuracy of the origin dataset(because the MNIST is a quite simple dataset to be classified), the adversarial example prediction isn't good enough as we image at the very first beginning. The accuracy seems to be stuck in the nearly 80\% around.
+\begin{lstlisting}[language=bash]
+	natural: 97.70%
+	adversarial: 87.23%
+	avg nat loss: 0.0737
+	avg adv loss: 0.3809
+	Waiting for the next checkpoint ...   (2022-06-08 18:53:17.261522)   ....................
+	Checkpoint models/a_very_robust_model\checkpoint-43500, evaluating ...   (2022-06-08 18:56:47.647872
+\end{lstlisting}
+From the eval side it can be clearly seen that the total accurate number of correct adversarial examples from the total adversarial examples is up to 87\%, which is surprisingly better than it performs on the training process.
+\begin{lstlisting}[language=bash]
+	Step 73800:    (2022-06-09 09:20:17.813290)
+	training nat accuracy 98.0%
+	training adv accuracy 94.0%
+	38.82966416796784 examples per second
+\end{lstlisting}
+From this time the training process has passed three quarters, and the accuracy of the adversarial examples has reached a satisfying level which can be said to be a robust model for adversarial examples for interval within $\epsilon$ of 0.3
+\begin{lstlisting}[language=bash]
+	natural: 98.31%
+	adversarial: 89.80%
+	avg nat loss: 0.0527
+	avg adv loss: 0.2941
+	Waiting for the next checkpoint ...   (2022-06-09 09:16:23.814569)   .......................
+	Checkpoint models/a_very_robust_model\checkpoint-73800, evaluating ...   (2022-06-09 09:20:24.178603)
+\end{lstlisting}
+It shows the almost same result from the eval side.
+\begin{lstlisting}[language=bash]
+	Step 99900:    (2022-06-09 20:44:02.171968)
+	training nat accuracy 98.0%
+	training adv accuracy 90.0%
+	43.815024366073985 examples per second
+\end{lstlisting}
+\begin{lstlisting}
+	natural: 98.47%
+	adversarial: 89.53%
+	avg nat loss: 0.0448
+	avg adv loss: 0.3077
+	Waiting for the next checkpoint ...   (2022-06-09 20:48:17.928656)
+\end{lstlisting}
+After the whole process of training the model has showed no obvious changes in the rate of accuracy, so it can be inferred that we may narrow the training step but get the same result.
+\subsection{Analysis}
+It can be seen in the Log information that the whole training result is quite good for the MNIST dataset itself for nearly reach the 100\% accuracy. As we put out the scheme of add little perturb in the origin image it indeed acheive the goal of lower the accuracy of the prediction of the model. 
+
+For 100000 steps of training our model has finally reach a total 90\% average accuracy for the adversarial examples, which can be said to be a robust model that can afford the perturbation for $\epsilon$ of $\pm$0.3.
+
+As for the limitation of computering resources we own, the total  training process is up to 74 hours, which is about 3 days, knowing that the training steps after 74000 has made no obvious progress, we decide to reduce the steps of training to decrease the computing time. Also, if we can use the GPU to accelerate we can also make the training process faster.
+%----------------------------------------------------------------------------------------
+%	RESULTS AND CONCLUSIONS
+%----------------------------------------------------------------------------------------
+\section{Code Analysis II}
+We first accelerate the whole program by using the hardware, where GPU support. As the process of optimize the code it is a big challenge for us to modify the code as the tensorflow packet is updating to version 2.x. Here we list the code part we modify the most.
+\begin{lstlisting}[language=Python]
+	os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+\end{lstlisting}
+Use this code to reduce the warning as pre-runnig the code, beacuse there are a huge number of changes as python updating its version.
+\begin{lstlisting}[language=Python]
+	global_step = tf.compat.v1.train.get_or_create_global_step()
+	train_step = tf.compat.v1.train.AdamOptimizer(1e-4).minimize(model.xent, global_step=global_step)
+	
+	self.x_input = tf.compat.v1.placeholder(tf.float32, shape=[None, 784])
+	self.y_input = tf.compat.v1.placeholder(tf.int64, shape=[None])
+\end{lstlisting}
+Change the code to match the version at tensorflow 2.x, as tensorflow some how keep the old function using the \emph{compat.v1}.
+\begin{lstlisting}[language=Python]
+	with tf.Session(config=tf.ConfigProto(log_device_placement=True)) as sess:
+\end{lstlisting}
+Change all the session with \emph{log\_device\_placement} to support GPU(omit other silimar change in other code file).
+
+\section{Results and Conclusions II}
+As we first run the code we aim to test how hardware can accelerate the whole program.
+\begin{lstlisting}[language=bash]
+	Step 1000:    (2022-06-13 15:04:21.558666)
+	training nat accuracy 74.0%
+	training adv accuracy 2.0%
+	237.21543654023898 examples per second
+	Step 1100:    (2022-06-13 15:04:43.332313)
+	training nat accuracy 76.0%
+	training adv accuracy 6.0%
+	230.8185748090493 examples per second
+\end{lstlisting}
+It can be see from the examples per second the code confirm, the whole speed is accelerated up to 4 ~ 10 times.
+\begin{lstlisting}[language=bash]
+Step 15600:    (2022-06-13 16:48:55.074258)
+training nat accuracy 98.0%
+training adv accuracy 52.0%
+239.24254737691675 examples per second
+Step 15700:    (2022-06-13 16:49:56.852863)
+training nat accuracy 94.0%
+training adv accuracy 42.0%
+81.87024693377435 examples per second
+\end{lstlisting}
+After about a quarter of training, it can be seen that the model has achieve a high accuracy in predicting the origin image in MNIST and about 40\% in the accuracy in adversarial examples.
+\begin{lstlisting}[language=bash]
+natural: 95.93%
+adversarial: 52.14%
+avg nat loss: 0.2592
+avg adv loss: 1.3339
+Waiting for the next checkpoint ...   (2022-06-13 16:50:35.344857)   .
+\end{lstlisting}
+But from the eval side, from the whole 10000 adversarial examples the model only reach a poor accuracy against adversarial examples. 
+\begin{lstlisting}[language=bash]
+	Step 49900:    (2022-06-13 21:05:35.157918)
+	training nat accuracy 100.0%
+	training adv accuracy 94.0%
+	120.05093444211309 examples per second
+	Step 50000:    (2022-06-13 21:06:30.693362)
+	training nat accuracy 100.0%
+	training adv accuracy 94.0%
+	90.04440934443765 examples per second
+\end{lstlisting}
+When training process achieve the half part, both accuracy is up to a quite good level.
+\begin{lstlisting}[language=bash]
+	natural: 97.86%
+	adversarial: 91.79%
+	avg nat loss: 0.0659
+	avg adv loss: 0.2519
+	Waiting for the next checkpoint ...   (2022-06-13 21:10:25.639418)   .
+\end{lstlisting}
+From the eval side, it can also admit that it has already been a good model to tolerant adversarial example.
+\begin{lstlisting}[language=bash]
+	Step 99800:    (2022-06-14 02:41:48.130489)
+	training nat accuracy 100.0%
+	training adv accuracy 98.0%
+	106.6556946114252 examples per second
+	Step 99900:    (2022-06-14 02:42:08.372805)
+	training nat accuracy 100.0%
+	training adv accuracy 94.0%
+	247.10671885746848 examples per second
+\end{lstlisting}
+As the end of training, it can be seen that the model reach a very high level of being against the adversarial examples.
+\begin{lstlisting}[language=bash]
+	natural: 98.55%
+	adversarial: 92.72%
+	avg nat loss: 0.0427
+	avg adv loss: 0.2109
+\end{lstlisting}
+It can say clearly that this model is a robust enough model for adversarial examples.
+\subsection{Analysis}
+From the whole training time we can see a obvious acceleration from the GPU support, the whole training time is reduced to about 20 hours, which can be seen as the five times of acceleration.
+
+Also, there might be some optimization in the function of \emph{compat.v1} because it is clear that the training effect is way better than the first version of code.  
+\section{Thinking and Future Progess}
+What comes to our mind first is that if a model is built to be robust, then its tolerance against adversarial examples becomes higher. But due to the limitation of the $\epsilon$ of the perturbation, the model might not so robust against all the degree of adversarial examples. As we add the $\epsilon$ to $\pm1$ the model accuracy is rapidly dropping to a very low level.
+
+This gives us a thought about advance the scheme of generating adversarial examples, which will definately lower the accuracy of the prediction of the model. But due to the time and the computing power limitation we haven't run the result.
+
+This project gives us a fully review about what is adversarial examples and how to build a model against it in practice. Also the process of improve the code and its performance gives us the perspective that the attack and defense is progessing mutually, there is no limitation to the scheme of attacking and there is no ceiling of defense method either.
+
+\section{Appendix}
+There are four file in our project, here we list a breif introduction of the file.
+
+\begin{tabular}{l l}
+	Bib & {the paper we refered} \\
+	Code & {Where we store our codes} \\
+	Results & {Where we store parts of the result we trained} \\
+	Report & {Where we store the report}
+\end{tabular}
+
+For code part, we list how to run the code.
+
+1) use \emph{python train.py} to start the train process
+
+2) use \emph{python eval.py} to start the monitor of accuracy from the eval side. You can do this at the same time.
+
+3) you can use the \emph{conda env create -f AISec.yaml} to rebuid the same enviroment as us in anaconda.
+
+%----------------------------------------------------------------------------------------
+%	ANSWERS TO DEFINITIONS
+%----------------------------------------------------------------------------------------
+
+
+
+
+
+\printbibliography % Output the bibliography
+
+%----------------------------------------------------------------------------------------
+
+\end{document}

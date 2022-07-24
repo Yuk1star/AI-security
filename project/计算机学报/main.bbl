@@ -1,0 +1,54 @@
+\begin{thebibliography}{8}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{#1}
+\expandafter\ifx\csname urlstyle\endcsname\relax\relax\else
+  \urlstyle{same}\fi
+\providecommand{\href}[2]{\url{#2}}
+\providecommand{\doi}[1]{\href{https://doi.org/#1}{#1}}
+
+\bibitem[作者(年{\natexlab{a}})]{article_example}
+作者.
+\newblock 题目\allowbreak[J].
+\newblock 刊名（全称）, 年, 期\penalty0 (卷):\penalty0 页码.
+
+\bibitem[作者(年{\natexlab{b}})]{inproceedings_example}
+作者.
+\newblock 文章题目\allowbreak[C]//\allowbreak
+Proceedings of the ... （会议名称）.
+\newblock 会议召开城市, 会议召开城市所在国家:
+  [出版者不详], 年{\natexlab{b}}: 页码.
+
+\bibitem[作者(出版年{\natexlab{a}})]{incollection_example}
+作者.
+\newblock 文章题目\allowbreak[M]//\allowbreak
+编者.
+\newblock 文集标题.
+\newblock 出版地: 出版社, 出版年{\natexlab{a}}: 页码.
+
+\bibitem[作者(出版年{\natexlab{b}})]{book_example}
+作者.
+\newblock 书名\allowbreak[M].
+\newblock 版次（初版不写）.
+\newblock 出版社地点: 出版社, 出版年{\natexlab{b}}.
+
+\bibitem[作者(年{\natexlab{c}})]{phdthesis_example}
+作者.
+\newblock 文章题目\allowbreak[D].
+\newblock 单位地点: 单位名称, 年{\natexlab{c}}.
+
+\bibitem[作者(年{\natexlab{d}})]{mastersthesis_example}
+作者.
+\newblock 文章题目\allowbreak[D].
+\newblock 单位地点: 单位名称, 年{\natexlab{d}}.
+
+\bibitem[作者(年{\natexlab{e}})]{techreport_example}
+作者.
+\newblock 文章题目: 报告编号\allowbreak[R].
+\newblock 单位地点: 单位, 年{\natexlab{e}}.
+
+\bibitem[专利拥有人(专利授权日期)]{patent_example}
+专利拥有人.
+\newblock 专利名称, 专利授权国家\allowbreak[P].
+\newblock 专利授权日期.
+
+\end{thebibliography}
